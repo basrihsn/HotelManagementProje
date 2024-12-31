@@ -1,134 +1,46 @@
 package com.tpe.service;
 
 import com.tpe.domain.Hotel;
-import com.tpe.exception.HotelNotFoundException;
+import com.tpe.exceptions.HotelNotFoundException;
 import com.tpe.repository.HotelRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
 
+@Service
 public class HotelService {
 
-    private Scanner scanner=new Scanner(System.in);
+    @Autowired
+    private HotelRepository hotelRepository;
 
-    private final HotelRepository hotelRepository;
-
-    //paramli const
-    public HotelService(HotelRepository hotelRepository) {
-        this.hotelRepository = hotelRepository;
-    }
-
-    //1-c save hotel
-    public void saveHotel(){
-        Hotel hotel=new Hotel();
-
-        System.out.println("Enter Hotel ID : ");
-        Long id=scanner.nextLong();//todo: hali hazırda zaten bu idye sahip varsa kontrolu yapılcak
-        scanner.nextLine();
-        // Hotel foundHotel=findHotelById(id);
-        // if (foundHotel!=null){
-        //     System.out.println("Hotel save is Failed!!!!");
-        // }else {
-        hotel.setId(id);
-        System.out.println("Enter Hotel Name : ");
-        hotel.setName(scanner.nextLine());
-
-        System.out.println("Enter Hotel Location ");
-        hotel.setLocation(scanner.nextLine());
-
+    // Save a new hotel
+    public void saveHotel(Hotel hotel) {
         hotelRepository.save(hotel);
-
-        System.out.println("Hotel is saved successfully. Hotel ID: "+hotel.getId());
-//    }
     }
 
-    //2-b : idsi verilen hotelin yazdırılma işlemi.
+    // Find a hotel by ID
     public Hotel findHotelById(Long id) {
-
-        Hotel foundHotel=hotelRepository.findById(id);//=hotelRepository.findHotelById(id);
-
-        try {
-            if (foundHotel != null) {
-                System.out.println("------------------------");
-                System.out.println(foundHotel);
-                System.out.println("------------------------");
-                return foundHotel;
-            } else {
-                throw new HotelNotFoundException("Hotel not found by ID : " + id);
-            }
-        }catch (HotelNotFoundException e){
-            System.err.println(e.getMessage());
-        }
-        return null;
+        return hotelRepository.findById(id)
+                .orElseThrow(() -> new HotelNotFoundException("Hotel not found with ID: " + id));
     }
 
-    public void getAllHotels() {
-
-        List<Hotel>allHotels=hotelRepository.findAll();//
-
-        if (allHotels.isEmpty()){
-            System.out.println("Hotel list is EMPTY!");
-        }else {
-            System.out.println("-----------ALL HOTELS------------");
-            for (Hotel hotel :allHotels) {
-                System.out.println(hotel);
-            }
-            System.out.println("-----------ALL HOTELS------------");
-        }
-
+    // Retrieve all hotels
+    public List<Hotel> getAllHotels() {
+        return hotelRepository.findAll();
     }
 
-    //8-b
-    public void deleteHotelById(Long deleteHotelId) {
-        //idsi verilen hotel var mı?
-        Hotel deleteHotel=findHotelById(deleteHotelId);
-
-        if (deleteHotel!=null){
-            System.out.println(deleteHotel);
-            System.out.println("Are you sure to delete : "+" Serious 🤔 :O");
-            System.out.println("Please answere with Y or N : ");
-            String select = scanner.next();
-
-            if (select.equalsIgnoreCase("Y")){
-                hotelRepository.delete(deleteHotel);
-                System.out.println("Delete operation is Successfully");
-            }else  {
-                System.out.println("Delete operation is CANCELED!!!");
-            }
-
-
-        }else  {
-            System.out.println("Delete operation is CANCELED!!!");
-        }
-
+    // Delete hotel by ID
+    public void deleteHotelById(Long id) {
+        Hotel hotel = findHotelById(id); // Ensure hotel exists
+        hotelRepository.delete(hotel);
     }
 
-    //7-b
-    public void updateHotelById(Long updateHotelId) {
-        //boyle bir otel var mı?
-        Hotel foundHotel=findHotelById(updateHotelId);
-        if (foundHotel!=null){
-            System.out.println("Enter the new hotel name : ");
-            String name= scanner.next();
-            scanner.nextLine();
-
-            System.out.println("Enter the new location : ");
-            String location= scanner.nextLine();
-            System.out.println("Are you sure to update : "+" Serious 🤔 :O");
-            System.out.println("Please answere with Y or N : ");
-            String select = scanner.next();
-            if (select.equalsIgnoreCase("Y")){
-                foundHotel.setName(name);
-                foundHotel.setLocation(location);
-                hotelRepository.update(foundHotel);
-            }else {
-                System.out.println("Update operation is CANCELED!!!");
-
-            }
-
-        }else {
-            System.out.println("Update operation is CANCELED!!!");
-        }
-
+    // Update hotel details
+    public void updateHotelById(Long id, Hotel updatedHotel) {
+        Hotel existingHotel = findHotelById(id);
+        existingHotel.setName(updatedHotel.getName());
+        existingHotel.setLocation(updatedHotel.getLocation());
+        hotelRepository.save(existingHotel);
     }
 }

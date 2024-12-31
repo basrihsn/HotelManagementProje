@@ -1,5 +1,7 @@
 package com.tpe.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -18,22 +20,28 @@ public class Reservation {
     private LocalDate checkOutDate;
 
     @ManyToOne
-    @JoinColumn(nullable = false)//todo düzenlenicek
+    @JoinColumn(nullable = false)
+    @JsonBackReference
     private Guest guest;
-
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @JsonBackReference
     private Room room;
 
+    // Default constructor
+    public Reservation() {
+    }
+
+    // Getters and setters
     public Long getId() {
         return id;
     }
-    /*
-        public void setId(Long id) {
-            this.id = id;
-        }
-    */
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public LocalDate getCheckInDate() {
         return checkInDate;
     }
@@ -72,7 +80,6 @@ public class Reservation {
                 "id=" + id +
                 ", checkInDate=" + checkInDate +
                 ", checkOutDate=" + checkOutDate +
-                ", room=" + room +
                 '}';
     }
 }

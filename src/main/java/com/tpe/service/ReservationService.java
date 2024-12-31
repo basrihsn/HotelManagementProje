@@ -3,56 +3,67 @@ package com.tpe.service;
 import com.tpe.domain.Guest;
 import com.tpe.domain.Reservation;
 import com.tpe.domain.Room;
+import com.tpe.exceptions.ReservationNotFoundException;
 import com.tpe.repository.ReservationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Scanner;
+import java.util.List;
 
+@Service
 public class ReservationService {
 
-    private Scanner scanner=new Scanner(System.in);
-
     private final ReservationRepository reservationRepository;
-
     private final GuestService guestService;
-
     private final RoomService roomService;
 
+    @Autowired
     public ReservationService(ReservationRepository reservationRepository, GuestService guestService, RoomService roomService) {
         this.reservationRepository = reservationRepository;
         this.guestService = guestService;
         this.roomService = roomService;
     }
 
-    public void createReservation() {
-        Reservation reservation=new Reservation();
+    // Create a new reservation
+    public Reservation createReservation(Reservation reservation) {
+        Guest guest = guestService.findGuestById(reservation.getGuest().getId());
+        Room room = roomService.findRoomById(reservation.getRoom().getId());
 
-        System.out.println("Enter check-in date : (yyyy-MM-dd)");//2024-12-25
-        String checkIn= scanner.nextLine();
-        reservation.setCheckInDate(LocalDate.parse(checkIn));
+        reservation.setGuest(guest);
+        reservation.setRoom(room);
 
-        System.out.println("Enter check-out date : (yyyy-MM-dd)");//todo düzenlenicek
-        String checkOut= scanner.nextLine();
-        reservation.setCheckOutDate(LocalDate.parse(checkOut));//2025-01-01
+        return reservationRepository.save(reservation);
+    }
 
-        System.out.println("Enter the room id : ");//307 fakat boyle bir oda yok
-        Long roomId= scanner.nextLong();
-        scanner.nextLine();
+    // Get all reservations
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
 
-        System.out.println("Enter the guest id : ");
-        Long guestId= scanner.nextLong();
-        scanner.nextLine();
-        Room room=roomService.findRoomById(roomId);
-        Guest guest=guestService.findGuestById(guestId);
-        if (room!=null&&guest!=null){
-            reservation.setRoom(room);
-            reservation.setGuest(guest);
+    // Get a reservation by ID
+    public Reservation getReservationById(Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with ID: " + id));
+    }
 
-            reservationRepository.save(reservation);
-            System.out.println("Reservation is created successfully....");
-        }else {
-            System.out.println("Reservation is CANCELED!!!!");
-        }
+    // Update an existing reservation
+    public Reservation updateReservation(Long id, Reservation updatedReservation) {
+        Reservation existingReservation = getReservationById(id);
 
+        Guest guest = guestService.findGuestById(updatedReservation.getGuest().getId());
+        Room room = roomService.findRoomById(updatedReservation.getRoom().getId());
+
+        existingReservation.setGuest(guest);
+        existingReservation.setRoom(room);
+        existingReservation.setCheckInDate(updatedReservation.getCheckInDate());
+        existingReservation.setCheckOutDate(updatedReservation.getCheckOutDate());
+
+        return reservationRepository.save(existingReservation);
+    }
+
+    // Delete a reservation by ID
+    public void deleteReservation(Long id) {
+        Reservation reservation = getReservationById(id);
+        reservationRepository.delete(reservation);
     }
 }

@@ -1,14 +1,18 @@
 package com.tpe.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 @Table(name = "t_room")
 public class Room {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -18,18 +22,12 @@ public class Room {
     private Integer capacity;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
-    private Hotel hotel;//bu oda hangi otelin
+    @JoinColumn(name = "hotel_id", nullable = false)
+    @JsonBackReference
+    private Hotel hotel;
 
-    //oda rez list 1,2,3
-    //rez. list 1 idli olani cıkarırsam : tablodan da silinsin
-
-    @OneToMany(mappedBy = "room",orphanRemoval = true)
-    private List<Reservation> reservations=new ArrayList<>();
-
-    //const
-    public Room() {
-    }
+    // Constructors, Getters, Setters
+    public Room() {}
 
     public Room(Long id, String number, Integer capacity, Hotel hotel) {
         this.id = id;
@@ -37,7 +35,7 @@ public class Room {
         this.capacity = capacity;
         this.hotel = hotel;
     }
-    //getter-setter
+
     public Long getId() {
         return id;
     }
@@ -68,22 +66,5 @@ public class Room {
 
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
-    }
-
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    @Override
-    public String toString() {
-        return "Room{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", capacity=" + capacity +
-                '}';
     }
 }

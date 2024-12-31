@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Management Frontend</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        section { margin-bottom: 30px; border: 1px solid #ccc; padding: 10px; }
+        h2 { margin-top: 0; }
+        label { display: inline-block; width: 80px; }
+        input { margin-bottom: 5px; }
+        hr { margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <h1>Hotel Management System - Basit Frontend</h1>
+    
+    <!-- 1) HOTEL SECTION -->
+    <section>
+        <h2>Hotels</h2>
+        <button onclick="loadHotels()">Tüm Otelleri Getir</button>
+        <ul id="hotelList"></ul>
+        <hr>
+        <h3>Yeni Otel Ekle</h3>
+        <label>Ad: </label><input type="text" id="hotelName"><br>
+        <label>Şehir: </label><input type="text" id="hotelCity"><br>
+        <label>Rating: </label><input type="number" id="hotelRating"><br>
+        <button onclick="addHotel()">Otel Ekle</button>
+    </section>
+
+    <!-- 2) STAFF SECTION -->
+    <section>
+        <h2>Staff</h2>
+        <button onclick="loadStaff()">Tüm Personeli Getir</button>
+        <ul id="staffList"></ul>
+        <hr>
+        <h3>Yeni Personel Ekle</h3>
+        <label>Ad: </label><input type="text" id="staffName"><br>
+        <label>Görev: </label><input type="text" id="staffRole"><br>
+        <button onclick="addStaff()">Personel Ekle</button>
+    </section>
+
+    <!-- 3) ROOM SECTION -->
+    <section>
+        <h2>Rooms</h2>
+        <button onclick="loadRooms()">Tüm Odaları Getir</button>
+        <ul id="roomList"></ul>
+        <hr>
+        <h3>Yeni Oda Ekle</h3>
+        <label>Oda No: </label><input type="text" id="roomNumber"><br>
+        <label>Tip: </label><input type="text" id="roomType"><br>
+        <button onclick="addRoom()">Oda Ekle</button>
+    </section>
+
+    <!-- 4) RESERVATION SECTION -->
+    <section>
+        <h2>Reservations</h2>
+        <button onclick="loadReservations()">Tüm Rezervasyonları Getir</button>
+        <ul id="reservationList"></ul>
+        <hr>
+        <h3>Yeni Rezervasyon Ekle</h3>
+        <label>Otel ID: </label><input type="number" id="reservationHotelId"><br>
+        <label>Oda ID: </label><input type="number" id="reservationRoomId"><br>
+        <label>Gün: </label><input type="date" id="reservationDate"><br>
+        <button onclick="addReservation()">Rezervasyon Ekle</button>
+    </section>
+
+    <script>
+        /**
+         * 1) HOTEL SECTION
+         */
+        async function loadHotels() {
+            try {
+                const response = await fetch('http://localhost:8080/api/hotels');
+                if (!response.ok) {
+                    throw new Error("Otelleri yüklerken hata oluştu!");
+                }
+                const hotels = await response.json();
+                const hotelList = document.getElementById('hotelList');
+                hotelList.innerHTML = '';
+                hotels.forEach(h => {
+                    const li = document.createElement('li');
+                    li.textContent = `ID: ${h.id} | Name: ${h.name} | City: ${h.city} | Rating: ${h.rating}`;
+                    hotelList.appendChild(li);
+                });
+            } catch (e) {
+                console.error(e);
+                alert('Otelleri getirirken bir hata oluştu!');
+            }
+        }
+
+        async function addHotel() {
+            const name = document.getElementById('hotelName').value;
+            const city = document.getElementById('hotelCity').value;
+            const rating = document.getElementById('hotelRating').value;
+
+            const newHotel = {
+                name: name,
+                city: city,
+                rating: parseInt(rating, 10)
+            };
+
+            try {
+                const response = await fetch('/hotels', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newHotel)
+                });
+                if (response.ok) {
+                    alert('Yeni Otel eklendi!');
+                    // Listeyi tekrar yükle
+                    loadHotels();
+                    // Formu temizle
+                    document.getElementById('hotelName').value = '';
+                    document.getElementById('hotelCity').value = '';
+                    document.getElementById('hotelRating').value = '';
+                } else {
+                    throw new Error("Otel eklenemedi!");
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Otel eklenirken bir hata oluştu!');
+            }
+        }
+
+        /**
+         * 2) STAFF SECTION
+         */
+        async function loadStaff() {
+            try {
+                const response = await fetch('/staff');
+                if (!response.ok) {
+                    throw new Error("Personel verileri yüklenemedi!");
+                }
+                const staffData = await response.json();
+                const staffList = document.getElementById('staffList');
+                staffList.innerHTML = '';
+                staffData.forEach(s => {
+                    const li = document.createElement('li');
+                    li.textContent = `ID: ${s.id} | Name: ${s.name} | Role: ${s.role}`;
+                    staffList.appendChild(li);
+                });
+            } catch (e) {
+                console.error(e);
+                alert('Personel bilgisi yüklenirken hata oluştu!');
+            }
+        }
+
+        async function addStaff() {
+            const name = document.getElementById('staffName').value;
+            const role = document.getElementById('staffRole').value;
+
+            const newStaff = {
+                name: name,
+                role: role
+            };
+
+            try {
+                const response = await fetch('/staff', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newStaff)
+                });
+                if (response.ok) {
+                    alert('Yeni Personel eklendi!');
+                    // Listeyi yenile
+                    loadStaff();
+                    // Formu temizle
+                    document.getElementById('staffName').value = '';
+                    document.getElementById('staffRole').value = '';
+                } else {
+                    throw new Error("Personel eklenemedi!");
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Personel eklenirken bir hata oluştu!');
+            }
+        }
+
+        /**
+         * 3) ROOM SECTION
+         */
+        async function loadRooms() {
+            try {
+                const response = await fetch('/rooms');
+                if (!response.ok) {
+                    throw new Error("Odalar yüklenemedi!");
+                }
+                const rooms = await response.json();
+                const roomList = document.getElementById('roomList');
+                roomList.innerHTML = '';
+                rooms.forEach(r => {
+                    const li = document.createElement('li');
+                    li.textContent = `ID: ${r.id} | RoomNumber: ${r.roomNumber} | RoomType: ${r.roomType}`;
+                    roomList.appendChild(li);
+                });
+            } catch (e) {
+                console.error(e);
+                alert('Odalar yüklenirken hata oluştu!');
+            }
+        }
+
+        async function addRoom() {
+            const roomNumber = document.getElementById('roomNumber').value;
+            const roomType = document.getElementById('roomType').value;
+
+            const newRoom = {
+                roomNumber: roomNumber,
+                roomType: roomType
+            };
+
+            try {
+                const response = await fetch('/rooms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newRoom)
+                });
+                if (response.ok) {
+                    alert('Yeni Oda eklendi!');
+                    loadRooms();
+                    document.getElementById('roomNumber').value = '';
+                    document.getElementById('roomType').value = '';
+                } else {
+                    throw new Error("Oda eklenemedi!");
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Oda eklenirken hata oluştu!');
+            }
+        }
+
+        /**
+         * 4) RESERVATION SECTION
+         */
+        async function loadReservations() {
+            try {
+                const response = await fetch('/reservation');
+                if (!response.ok) {
+                    throw new Error("Rezervasyonlar yüklenemedi!");
+                }
+                const reservations = await response.json();
+                const reservationList = document.getElementById('reservationList');
+                reservationList.innerHTML = '';
+                reservations.forEach(res => {
+                    const li = document.createElement('li');
+                    li.textContent = `ID: ${res.id} | HotelID: ${res.hotelId} | RoomID: ${res.roomId} | Date: ${res.date}`;
+                    reservationList.appendChild(li);
+                });
+            } catch (e) {
+                console.error(e);
+                alert('Rezervasyon bilgisi yüklenirken hata oluştu!');
+            }
+        }
+
+        async function addReservation() {
+            const hotelId = document.getElementById('reservationHotelId').value;
+            const roomId = document.getElementById('reservationRoomId').value;
+            const date = document.getElementById('reservationDate').value;
+
+            const newReservation = {
+                hotelId: parseInt(hotelId, 10),
+                roomId: parseInt(roomId, 10),
+                date: date
+            };
+
+            try {
+                const response = await fetch('/reservation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newReservation)
+                });
+                if (response.ok) {
+                    alert('Yeni Rezervasyon eklendi!');
+                    loadReservations();
+                    // Form temizleme
+                    document.getElementById('reservationHotelId').value = '';
+                    document.getElementById('reservationRoomId').value = '';
+                    document.getElementById('reservationDate').value = '';
+                } else {
+                    throw new Error("Rezervasyon eklenemedi!");
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Rezervasyon eklenirken hata oluştu!');
+            }
+        }
+    </script>
+
+</body>
+</html>

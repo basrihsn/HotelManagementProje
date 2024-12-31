@@ -1,4 +1,4 @@
-package com.tpe.exception;
+package com.tpe.exceptions;
 
 public class HotelNotFoundException extends RuntimeException {
     public HotelNotFoundException(String message) {

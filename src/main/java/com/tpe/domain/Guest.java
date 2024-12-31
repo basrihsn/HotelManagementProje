@@ -1,5 +1,7 @@
 package com.tpe.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,25 +13,28 @@ public class Guest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(nullable = false)
     private String name;
+
     private LocalDateTime createDate;
 
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "guest",orphanRemoval = true)
-    private List<Reservation> reservations=new ArrayList<>();
+    @OneToMany(mappedBy = "guest", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Reservation> reservations = new ArrayList<>();
 
+    // Default constructor
+    public Guest() {
+    }
 
+    // Getters and setters
     public Long getId() {
         return id;
     }
-    /*
-        public void setId(Long id) {
-            this.id = id;
-        }
-    */
+
     public String getName() {
         return name;
     }
@@ -41,6 +46,7 @@ public class Guest {
     public LocalDateTime getCreateDate() {
         return createDate;
     }
+
     @PrePersist
     public void setCreateDate() {
         this.createDate = LocalDateTime.now();

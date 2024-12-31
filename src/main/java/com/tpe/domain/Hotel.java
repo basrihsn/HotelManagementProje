@@ -4,11 +4,16 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "t_hotel")
 public class Hotel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -17,21 +22,17 @@ public class Hotel {
     @Column(nullable = false)
     private String location;
 
-    //A oteli odalari 11,22,33
-    //oda listesinden 11'i cıkarmak, 11,12,13-> room tablosunda kalmaya devam eder
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Room> rooms = new ArrayList<>();
 
-    //orphanremovel: 11 i room tablosundan da siler
-    @OneToMany(mappedBy = "hotel",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
-    private List<Room> rooms=new ArrayList<>();
+    // Constructors, Getters, Setters
+    public Hotel() {}
 
-    //const
     public Hotel(Long id, String name, String location) {
         this.id = id;
         this.name = name;
         this.location = location;
-    }
-
-    public Hotel() {
     }
 
     public Long getId() {
@@ -64,15 +65,5 @@ public class Hotel {
 
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
-    }
-
-    @Override
-    public String toString() {
-        return "Hotel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", location='" + location + '\'' +
-                ", rooms=" + rooms +
-                '}';
     }
 }

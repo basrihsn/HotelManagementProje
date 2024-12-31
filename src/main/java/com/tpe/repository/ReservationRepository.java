@@ -1,23 +1,13 @@
 package com.tpe.repository;
 
-import com.tpe.config.HibernateUtils;
 import com.tpe.domain.Reservation;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public class ReservationRepository {
+import java.util.List;
 
-    private Session session;
-    public void save(Reservation reservation) {
-        try {
-            session = HibernateUtils.getSessionFactory().openSession();
-            Transaction trs = session.beginTransaction();
-            session.save(reservation);
-            trs.commit();
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            HibernateUtils.closeSession(session);
-        }
-    }
+@Repository
+public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+    List<Reservation> findByRoomId(Long roomId);
+    List<Reservation> findByGuestId(Long guestId);
 }

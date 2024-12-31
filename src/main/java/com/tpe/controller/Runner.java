@@ -1,8 +1,17 @@
 package com.tpe.controller;
 
-public class Runner {
-    //dogru proje
-    public static void main(String[] args) {
-        HotelManagementSystem.displayHotelManagementSystemMenu();
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Runner implements CommandLineRunner {
+
+    @Autowired
+    private HotelManagementSystem hotelManagementSystem;
+
+    @Override
+    public void run(String... args) throws Exception {
+        hotelManagementSystem.displayHotelManagementSystemMenu();
     }
 }

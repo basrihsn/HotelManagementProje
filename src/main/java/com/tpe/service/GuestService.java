@@ -1,66 +1,41 @@
 package com.tpe.service;
 
-import com.tpe.domain.Address;
 import com.tpe.domain.Guest;
-import com.tpe.exception.GuestNotFoundException;
+import com.tpe.exceptions.GuestNotFoundException;
 import com.tpe.repository.GuestRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.Scanner;
+import java.util.List;
 
+@Service
 public class GuestService {
-    //9-b
-    private Scanner scanner=new Scanner(System.in);
 
-    private final GuestRepository guestRepository;
+    @Autowired
+    private GuestRepository guestRepository;
 
-    public GuestService(GuestRepository guestRepository) {
-        this.guestRepository = guestRepository;
+    public Guest saveGuest(Guest guest) {
+        return guestRepository.save(guest);
     }
 
-    //9-b
-    public void saveGuest() {
-        Guest guest=new Guest();
-
-        System.out.println("Enter the name : ");
-        guest.setName(scanner.nextLine());
-
-        Address address=new Address();
-        System.out.println("Enter Street : ");
-        address.setStreet(scanner.nextLine());
-
-        System.out.println("Enter city : ");
-        address.setCity(scanner.nextLine());
-
-        System.out.println("Enter country : ");
-        address.setCountry(scanner.nextLine());
-
-        System.out.println("Enter zipcode : ");
-        address.setZipcode(scanner.nextLine());
-
-        guest.setAddress(address);
-
-        guestRepository.save(guest);
-        System.out.println("Guest is saved Successfully.....");
-
-
+    public Guest findGuestById(Long id) {
+        return guestRepository.findById(id)
+                .orElseThrow(() -> new GuestNotFoundException("Guest not found with ID: " + id));
     }
 
-    //odev2: b
-    public Guest findGuestById(Long guestId) {
-        try {
-            Guest foundGuest=guestRepository.findById(guestId);
-            if (foundGuest!=null){
-                System.out.println("----------------------------");
-                System.out.println(foundGuest);
-                System.out.println("----------------------------");
-                return foundGuest;
-            }else {
-                throw new GuestNotFoundException("Guest not found by Id : "+guestId);
-            }
+    public List<Guest> getAllGuests() {
+        return guestRepository.findAll();
+    }
 
-        }catch (GuestNotFoundException e){
-            System.out.println(e.getMessage());
-        }
-        return null;
+    public void deleteGuestById(Long id) {
+        Guest guest = findGuestById(id);
+        guestRepository.delete(guest);
+    }
+
+    public Guest updateGuestById(Long id, Guest updatedGuest) {
+        Guest existingGuest = findGuestById(id);
+        existingGuest.setName(updatedGuest.getName());
+        existingGuest.setAddress(updatedGuest.getAddress());
+        return guestRepository.save(existingGuest);
     }
 }
