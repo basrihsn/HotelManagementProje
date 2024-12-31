@@ -1,9 +1,11 @@
 package com.tpe.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "t_reservation")
@@ -21,12 +23,12 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    @JsonBackReference
+    @JsonBackReference("guest-reservation")
     private Guest guest;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    @JsonBackReference
+    @JsonBackReference("room-reservation")
     private Room room;
 
     // Default constructor
