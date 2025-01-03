@@ -5,303 +5,396 @@
     <title>Hotel Management Frontend</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
-            background-color: #f9f9f9;
+            background: linear-gradient(135deg, #e3f2fd, #90caf9);
+            color: #333;
         }
         section {
             margin-bottom: 30px;
             border: 1px solid #ddd;
-            padding: 15px;
+            padding: 20px;
             background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        section:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
         h1 {
-            color: #444;
+            color: #1565c0;
+            text-align: center;
+            margin-bottom: 40px;
         }
-        h2, h3 {
-            margin-top: 0;
-            color: #333;
+        h2 {
+            color: #0d47a1;
+            border-bottom: 2px solid #90caf9;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #1e88e5;
         }
         label {
             display: inline-block;
-            width: 100px;
-            margin-bottom: 5px;
+            width: 120px;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
         input {
             margin-bottom: 10px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 8px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            width: calc(100% - 140px);
+            max-width: 400px;
         }
         button {
-            padding: 7px 12px;
+            padding: 10px 16px;
             color: #fff;
-            background-color: #007BFF;
+            background-color: #1565c0;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #0d47a1;
+            transform: translateY(-2px);
         }
         ul {
-            list-style-type: none;
-            padding: 0;
+            list-style-type: disc;
+            padding-left: 20px;
         }
         li {
-            padding: 5px 0;
+            padding: 8px 0;
+        }
+        li button {
+            margin-left: 10px;
+            background-color: #d32f2f;
+            padding: 5px 10px;
+        }
+        li button:hover {
+            background-color: #b71c1c;
         }
     </style>
 </head>
 <body>
-    <h1>Hotel Management System</h1>
+<h1>Hotel Management System</h1>
 
-    <!-- Hotel Section -->
-    <section>
-        <h2>Hotels</h2>
-        <button onclick="loadHotels()">Load All Hotels</button>
-        <ul id="hotelList"></ul>
-        <hr>
-        <h3>Add New Hotel</h3>
-        <label>Name:</label><input type="text" id="hotelName"><br>
-        <label>Location:</label><input type="text" id="hotelLocation"><br>
-        <button onclick="addHotel()">Add Hotel</button>
-    </section>
+<!-- Hotel Section -->
+<section>
+    <h2>Hotels</h2>
+    <button onclick="loadHotels()">Load All Hotels</button>
+    <ul id="hotelList"></ul>
+    <hr>
+    <h3>Add New Hotel</h3>
+    <label>Name:</label><input type="text" id="hotelName"><br>
+    <label>Location:</label><input type="text" id="hotelLocation"><br>
+    <button onclick="addHotel()">Add Hotel</button>
+</section>
 
-    <!-- Room Section -->
-    <section>
-        <h2>Rooms</h2>
-        <button onclick="loadRooms()">Load All Rooms</button>
-        <ul id="roomList"></ul>
-        <hr>
-        <h3>Add New Room</h3>
-        <label>Number:</label><input type="text" id="roomNumber"><br>
-        <label>Capacity:</label><input type="number" id="roomCapacity"><br>
-        <label>Hotel ID:</label><input type="number" id="roomHotelId"><br>
-        <button onclick="addRoom()">Add Room</button>
-    </section>
+<!-- Room Section -->
+<section>
+    <h2>Rooms</h2>
+    <button onclick="loadRooms()">Load All Rooms</button>
+    <ul id="roomList"></ul>
+    <hr>
+    <h3>Add New Room</h3>
+    <label>Number:</label><input type="text" id="roomNumber"><br>
+    <label>Capacity:</label><input type="number" id="roomCapacity"><br>
+    <label>Hotel ID:</label><input type="number" id="roomHotelId"><br>
+    <button onclick="addRoom()">Add Room</button>
+</section>
 
-    <!-- Guest Section -->
-    <section>
-        <h2>Guests</h2>
-        <button onclick="loadGuests()">Load All Guests</button>
-        <ul id="guestList"></ul>
-        <hr>
-        <h3>Add New Guest</h3>
-        <label>Name:</label><input type="text" id="guestName"><br>
-        <label>Street:</label><input type="text" id="guestStreet"><br>
-        <label>City:</label><input type="text" id="guestCity"><br>
-        <label>Zip:</label><input type="text" id="guestZip"><br>
-        <button onclick="addGuest()">Add Guest</button>
-    </section>
+<!-- Guest Section -->
+<section>
+    <h2>Guests</h2>
+    <button onclick="loadGuests()">Load All Guests</button>
+    <ul id="guestList"></ul>
+    <hr>
+    <h3>Add New Guest</h3>
+    <label>Name:</label><input type="text" id="guestName"><br>
+    <label>Street:</label><input type="text" id="guestStreet"><br>
+    <label>City:</label><input type="text" id="guestCity"><br>
+    <label>Zip:</label><input type="text" id="guestZip"><br>
+    <button onclick="addGuest()">Add Guest</button>
+</section>
 
-    <!-- Reservation Section -->
-    <section>
-        <h2>Reservations</h2>
-        <button onclick="loadReservations()">Load All Reservations</button>
-        <ul id="reservationList"></ul>
-        <hr>
-        <h3>Add New Reservation</h3>
-        <label>Guest ID:</label><input type="number" id="reservationGuestId"><br>
-        <label>Room ID:</label><input type="number" id="reservationRoomId"><br>
-        <label>Check-In:</label><input type="date" id="reservationCheckIn"><br>
-        <label>Check-Out:</label><input type="date" id="reservationCheckOut"><br>
-        <button onclick="addReservation()">Add Reservation</button>
-    </section>
+<!-- Reservation Section -->
+<section>
+    <h2>Reservations</h2>
+    <button onclick="loadReservations()">Load All Reservations</button>
+    <ul id="reservationList"></ul>
+    <hr>
+    <h3>Add New Reservation</h3>
+    <label>Guest ID:</label><input type="number" id="reservationGuestId"><br>
+    <label>Room ID:</label><input type="number" id="reservationRoomId"><br>
+    <label>Check-In:</label><input type="date" id="reservationCheckIn"><br>
+    <label>Check-Out:</label><input type="date" id="reservationCheckOut"><br>
+    <button onclick="addReservation()">Add Reservation</button>
+</section>
 
-    <script>
-        // Hotel Section
-        async function loadHotels() {
-            try {
-                const response = await fetch('/api/hotels');
-                const hotels = await response.json();
-                const hotelList = document.getElementById('hotelList');
-                hotelList.innerHTML = '';
-                hotels.forEach(h => {
-                    const li = document.createElement('li');
-                    li.textContent = `ID: ${h.id} | Name: ${h.name} | Location: ${h.location}`;
-                    hotelList.appendChild(li);
-                });
-            } catch (e) {
-                console.error(e);
-                alert('Failed to load hotels.');
-            }
+<script>
+    // Hotel Section
+    async function loadHotels() {
+        try {
+            const response = await fetch('/api/hotels');
+            const hotels = await response.json();
+            const hotelList = document.getElementById('hotelList');
+            hotelList.innerHTML = '';
+            hotels.forEach(h => {
+                const li = document.createElement('li');
+                li.innerHTML = `ID: ${h.id} | Name: ${h.name} | Location: ${h.location} <button onclick="deleteHotel(${h.id})">Delete</button>`;
+                hotelList.appendChild(li);
+            });
+        } catch (e) {
+            console.error(e);
+            alert('Failed to load hotels.');
         }
+    }
 
-        async function addHotel() {
-            const name = document.getElementById('hotelName').value;
-            const location = document.getElementById('hotelLocation').value;
+    async function addHotel() {
+        const name = document.getElementById('hotelName').value;
+        const location = document.getElementById('hotelLocation').value;
 
-            const newHotel = { name, location };
+        const newHotel = { name, location };
 
-            try {
-                const response = await fetch('/api/hotels', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newHotel)
-                });
-                if (response.ok) {
-                    alert('Hotel added successfully!');
-                    loadHotels();
-                    document.getElementById('hotelName').value = '';
-                    document.getElementById('hotelLocation').value = '';
-                } else {
-                    throw new Error('Failed to add hotel.');
-                }
-            } catch (e) {
-                console.error(e);
-                alert('Error adding hotel.');
+        try {
+            const response = await fetch('/api/hotels', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newHotel)
+            });
+            if (response.ok) {
+                alert('Hotel added successfully!');
+                loadHotels();
+                document.getElementById('hotelName').value = '';
+                document.getElementById('hotelLocation').value = '';
+            } else {
+                throw new Error('Failed to add hotel.');
             }
+        } catch (e) {
+            console.error(e);
+            alert('Error adding hotel.');
         }
+    }
 
-        // Room Section
-        async function loadRooms() {
-            try {
-                const response = await fetch('/api/rooms');
-                const rooms = await response.json();
-                const roomList = document.getElementById('roomList');
-                roomList.innerHTML = '';
-                rooms.forEach(r => {
-                    const li = document.createElement('li');
-                    li.textContent = `ID: ${r.id} | Number: ${r.number} | Capacity: ${r.capacity} | Hotel ID: ${r.hotel.id}`;
-                    roomList.appendChild(li);
-                });
-            } catch (e) {
-                console.error(e);
-                alert('Failed to load rooms.');
+    async function deleteHotel(hotelId) {
+        try {
+            const response = await fetch(`/api/hotels/${hotelId}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                alert('Hotel deleted successfully!');
+                loadHotels();
+            } else {
+                throw new Error('Failed to delete hotel.');
             }
+        } catch (e) {
+            console.error(e);
+            alert('Error deleting hotel.');
         }
+    }
 
-        async function addRoom() {
-            const number = document.getElementById('roomNumber').value;
-            const capacity = document.getElementById('roomCapacity').value;
-            const hotelId = document.getElementById('roomHotelId').value;
+    // Room Section
+    async function loadRooms() {
+        try {
+            const response = await fetch('/api/rooms');
+            const rooms = await response.json();
+            const roomList = document.getElementById('roomList');
+            roomList.innerHTML = '';
+            rooms.forEach(r => {
+                const li = document.createElement('li');
+                li.innerHTML = `ID: ${r.id} | Number: ${r.number} | Capacity: ${r.capacity} <button onclick="deleteRoom(${r.id})">Delete</button>`;
+                roomList.appendChild(li);
+            });
+        } catch (e) {
+            console.error(e);
+            alert('Failed to load rooms.');
+        }
+    }
 
-            const newRoom = { number, capacity: parseInt(capacity, 10), hotel: { id: parseInt(hotelId, 10) } };
+    async function addRoom() {
+        const number = document.getElementById('roomNumber').value;
+        const capacity = document.getElementById('roomCapacity').value;
+        const hotelId = document.getElementById('roomHotelId').value;
 
-            try {
-                const response = await fetch('/api/rooms', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newRoom)
-                });
-                if (response.ok) {
-                    alert('Room added successfully!');
-                    loadRooms();
-                    document.getElementById('roomNumber').value = '';
-                    document.getElementById('roomCapacity').value = '';
-                    document.getElementById('roomHotelId').value = '';
-                } else {
-                    throw new Error('Failed to add room.');
-                }
-            } catch (e) {
-                console.error(e);
-                alert('Error adding room.');
+        const newRoom = { number, capacity: parseInt(capacity, 10), hotel: { id: parseInt(hotelId, 10) } };
+
+        try {
+            const response = await fetch('/api/rooms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newRoom)
+            });
+            if (response.ok) {
+                alert('Room added successfully!');
+                loadRooms();
+                document.getElementById('roomNumber').value = '';
+                document.getElementById('roomCapacity').value = '';
+                document.getElementById('roomHotelId').value = '';
+            } else {
+                throw new Error('Failed to add room.');
             }
+        } catch (e) {
+            console.error(e);
+            alert('Error adding room.');
         }
+    }
 
-        // Guest Section
-        async function loadGuests() {
-            try {
-                const response = await fetch('/api/guests');
-                const guests = await response.json();
-                const guestList = document.getElementById('guestList');
-                guestList.innerHTML = '';
-                guests.forEach(g => {
-                    const li = document.createElement('li');
-                    li.textContent = `ID: ${g.id} | Name: ${g.name} | Address: ${g.address.street}, ${g.address.city}, ${g.address.zip}`;
-                    guestList.appendChild(li);
-                });
-            } catch (e) {
-                console.error(e);
-                alert('Failed to load guests.');
+    async function deleteRoom(roomId) {
+        try {
+            const response = await fetch(`/api/rooms/${roomId}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                alert('Room deleted successfully!');
+                loadRooms();
+            } else {
+                throw new Error('Failed to delete room.');
             }
+        } catch (e) {
+            console.error(e);
+            alert('Error deleting room.');
         }
+    }
 
-        async function addGuest() {
-            const name = document.getElementById('guestName').value;
-            const street = document.getElementById('guestStreet').value;
-            const city = document.getElementById('guestCity').value;
-            const zip = document.getElementById('guestZip').value;
+    // Guest Section
+    async function loadGuests() {
+        try {
+            const response = await fetch('/api/guests');
+            const guests = await response.json();
+            const guestList = document.getElementById('guestList');
+            guestList.innerHTML = '';
+            guests.forEach(g => {
+                const li = document.createElement('li');
+                li.innerHTML = `ID: ${g.id} | Name: ${g.name} | Address: ${g.address.street}, ${g.address.city} <button onclick="deleteGuest(${g.id})">Delete</button>`;
+                guestList.appendChild(li);
+            });
+        } catch (e) {
+            console.error(e);
+            alert('Failed to load guests.');
+        }
+    }
 
-            const newGuest = { name, address: { street, city, zip } };
+    async function addGuest() {
+        const name = document.getElementById('guestName').value;
+        const street = document.getElementById('guestStreet').value;
+        const city = document.getElementById('guestCity').value;
+        const zip = document.getElementById('guestZip').value;
 
-            try {
-                const response = await fetch('/api/guests', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newGuest)
-                });
-                if (response.ok) {
-                    alert('Guest added successfully!');
-                    loadGuests();
-                    document.getElementById('guestName').value = '';
-                    document.getElementById('guestStreet').value = '';
-                    document.getElementById('guestCity').value = '';
-                    document.getElementById('guestZip').value = '';
-                } else {
-                    throw new Error('Failed to add guest.');
-                }
-            } catch (e) {
-                console.error(e);
-                alert('Error adding guest.');
+        const newGuest = { name, address: { street, city, zip } };
+
+        try {
+            const response = await fetch('/api/guests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newGuest)
+            });
+            if (response.ok) {
+                alert('Guest added successfully!');
+                loadGuests();
+                document.getElementById('guestName').value = '';
+                document.getElementById('guestStreet').value = '';
+                document.getElementById('guestCity').value = '';
+                document.getElementById('guestZip').value = '';
+            } else {
+                throw new Error('Failed to add guest.');
             }
+        } catch (e) {
+            console.error(e);
+            alert('Error adding guest.');
         }
+    }
 
-        // Reservation Section
-        async function loadReservations() {
-            try {
-                const response = await fetch('/api/reservations');
-                const reservations = await response.json();
-                const reservationList = document.getElementById('reservationList');
-                reservationList.innerHTML = '';
-                reservations.forEach(r => {
-                    const li = document.createElement('li');
-                    li.textContent = `ID: ${r.id} | Guest ID: ${r.guest.id} | Room ID: ${r.room.id} | Check-In: ${r.checkInDate} | Check-Out: ${r.checkOutDate}`;
-                    reservationList.appendChild(li);
-                });
-            } catch (e) {
-                console.error(e);
-                alert('Failed to load reservations.');
+    async function deleteGuest(guestId) {
+        try {
+            const response = await fetch(`/api/guests/${guestId}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                alert('Guest deleted successfully!');
+                loadGuests();
+            } else {
+                throw new Error('Failed to delete guest.');
             }
+        } catch (e) {
+            console.error(e);
+            alert('Error deleting guest.');
         }
+    }
 
-        async function addReservation() {
-            const guestId = document.getElementById('reservationGuestId').value;
-            const roomId = document.getElementById('reservationRoomId').value;
-            const checkInDate = document.getElementById('reservationCheckIn').value;
-            const checkOutDate = document.getElementById('reservationCheckOut').value;
+    // Reservation Section
+    async function loadReservations() {
+        try {
+            const response = await fetch('/api/reservations');
+            const reservations = await response.json();
+            const reservationList = document.getElementById('reservationList');
+            reservationList.innerHTML = '';
+            reservations.forEach(r => {
+                const li = document.createElement('li');
+                li.innerHTML = `ID: ${r.id} | Check-In: ${r.checkInDate} | Check-Out: ${r.checkOutDate} <button onclick="deleteReservation(${r.id})">Delete</button>`;
+                reservationList.appendChild(li);
+            });
+        } catch (e) {
+            console.error(e);
+            alert('Failed to load reservations.');
+        }
+    }
 
-            const newReservation = { 
-                checkInDate, 
-                checkOutDate, 
-                guest: { id: parseInt(guestId, 10) }, 
-                room: { id: parseInt(roomId, 10) } 
-            };
+    async function addReservation() {
+        const guestId = document.getElementById('reservationGuestId').value;
+        const roomId = document.getElementById('reservationRoomId').value;
+        const checkInDate = document.getElementById('reservationCheckIn').value;
+        const checkOutDate = document.getElementById('reservationCheckOut').value;
 
-            try {
-                const response = await fetch('/api/reservations', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newReservation)
-                });
-                if (response.ok) {
-                    alert('Reservation added successfully!');
-                    loadReservations();
-                    document.getElementById('reservationGuestId').value = '';
-                    document.getElementById('reservationRoomId').value = '';
-                    document.getElementById('reservationCheckIn').value = '';
-                    document.getElementById('reservationCheckOut').value = '';
-                } else {
-                    throw new Error('Failed to add reservation.');
-                }
-            } catch (e) {
-                console.error(e);
-                alert('Error adding reservation.');
+        const newReservation = {
+            checkInDate,
+            checkOutDate,
+            guest: { id: parseInt(guestId, 10) },
+            room: { id: parseInt(roomId, 10) }
+        };
+
+        try {
+            const response = await fetch('/api/reservations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newReservation)
+            });
+            if (response.ok) {
+                alert('Reservation added successfully!');
+                loadReservations();
+                document.getElementById('reservationGuestId').value = '';
+                document.getElementById('reservationRoomId').value = '';
+                document.getElementById('reservationCheckIn').value = '';
+                document.getElementById('reservationCheckOut').value = '';
+            } else {
+                throw new Error('Failed to add reservation.');
             }
+        } catch (e) {
+            console.error(e);
+            alert('Error adding reservation.');
         }
-    </script>
+    }
+
+    async function deleteReservation(reservationId) {
+        try {
+            const response = await fetch(`/api/reservations/${reservationId}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                alert('Reservation deleted successfully!');
+                loadReservations();
+            } else {
+                throw new Error('Failed to delete reservation.');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Error deleting reservation.');
+        }
+    }
+</script>
 </body>
 </html>

@@ -12,11 +12,13 @@
 
         <property name = "hibernate.connection.driver_class">org.postgresql.Driver</property>
 
-        <property name="connection.url">jdbc:postgresql://localhost:5432/hotelMS_db</property>
 
-        <property name="connection.username">techpro</property>
 
-        <property name="connection.password">password</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/hotelms_db</property>
+
+        <property name="connection.username">hotel</property>
+
+        <property name="connection.password">123456</property>
 
 
         <property name = "hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
