@@ -11,7 +11,8 @@ public class Runner implements CommandLineRunner {
     private HotelManagementSystem hotelManagementSystem;
 
     @Override
-    public void run(String... args) throws Exception {
-        hotelManagementSystem.displayHotelManagementSystemMenu();
+    public void run(String... args) {
+        // Just log startup message instead of displaying menu
+        System.out.println("Hotel Management System is running...");
     }
 }
