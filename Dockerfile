@@ -1,14 +1,14 @@
-# Use OpenJDK 17 as the base image
-FROM eclipse-temurin:17-jdk-alpine
-
-# Set working directory
+# Build stage
+FROM eclipse-temurin:17-jdk-alpine as build
 WORKDIR /app
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
 
-# Copy the JAR file
-COPY target/*.jar app.jar
-
-# Expose the port your app runs on
+# Run stage
+FROM eclipse-temurin:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8083
-
-# Command to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"] 

@@ -2,8 +2,8 @@
 # Exit on error
 set -e
 
-# Build the project
-./mvnw clean package -DskipTests
+# Make mvnw executable
+chmod +x mvnw
 
-# Copy the built JAR to the target directory
-cp target/*.jar target/app.jar 
+# Build the project and create JAR
+./mvnw clean package -DskipTests 
