@@ -56,7 +56,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.18.2</version> <!-- Jackson'ın uyumlu bir sürümünü seçin -->
+            <version>2.13.5</version>
         </dependency>
 
 
@@ -69,7 +69,25 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.9</version> <!-- Ensure the version matches Spring Boot dependencies -->
+                <version>2.7.9</version>
+                <configuration>
+                    <mainClass>com.tpe.HotelManagementApplication</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- Maven Wrapper Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-wrapper-plugin</artifactId>
+                <version>3.2.0</version>
             </plugin>
         </plugins>
     </build>
